@@ -1,11 +1,16 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://World/TileMap.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://World/Demo World.gd" type="Script" id=4]
 
 [node name="Demo World" type="Node2D"]
+script = ExtResource( 4 )
+peak_threshhold = 0.5
+valley_threshhold = 0.1
 
 [node name="TileMap" parent="." instance=ExtResource( 1 )]
+tile_data = PoolIntArray( -1048576, 0, 0, -1048575, 0, 0, -1048574, 0, 0, -1048573, 0, 0, -983040, 0, 0, -983037, 0, 0, -917504, 0, 0, -917501, 0, 0, -851968, 0, 0, -851967, 0, 0, -851966, 0, 0, -851965, 0, 0, -851960, 0, 0, -851959, 0, 1, -851958, 0, 131076, -851957, 0, 2, -786424, 0, 131072, -786423, 0, 131073, -786422, 0, 131073, -786421, 0, 131074, -720892, 0, 0, -720891, 0, 131076, -720890, 0, 131076, -720889, 0, 2, -655356, 0, 131072, -655355, 0, 131073, -655354, 0, 131073, -655353, 0, 131074, -327684, 0, 0, -327683, 0, 1, -327682, 0, 1, -327681, 0, 131076, -393216, 0, 131076, -393215, 0, 131076, -393214, 0, 1, -393213, 0, 2, -262148, 0, 131072, -262147, 0, 4, -262146, 0, 4, -262145, 0, 131073, -327680, 0, 4, -327679, 0, 4, -327678, 0, 4, -327677, 0, 131074 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 315, 174 )
+position = Vector2( -11, -255 )

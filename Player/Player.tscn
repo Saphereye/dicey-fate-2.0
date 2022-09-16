@@ -1,13 +1,205 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Assets/herochar sprites(new)/herochar_spritesheet(new).png" type="Texture" id=1]
-[ext_resource path="res://Player/PlayerScript.gd" type="Script" id=2]
+[ext_resource path="res://Player/Player.gd" type="Script" id=2]
+
+[sub_resource type="Shader" id=11]
+code = "shader_type canvas_item;
+
+uniform vec4 flashColor:hint_color = vec4(1.0);
+uniform float flashModifier:hint_range(0.0,1.0) = 1;
+
+void fragment()
+{
+	vec4 color = texture(TEXTURE, UV);
+	color.rgb = mix(color.rgb, flashColor.rgb, flashModifier);
+	
+	COLOR = color;
+}"
+
+[sub_resource type="ShaderMaterial" id=12]
+shader = SubResource( 11 )
+shader_param/flashColor = Color( 1, 1, 1, 1 )
+shader_param/flashModifier = 0.0
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 16.0
+height = 30.0
+
+[sub_resource type="Animation" id=4]
+resource_name = "Idle"
+length = 0.8
+loop = true
+step = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 0, 5 ), Vector2( 1, 5 ), Vector2( 2, 5 ), Vector2( 3, 5 ) ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "Jump_Down"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 48, 49, 50 ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "Jump_Up"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 56, 57, 58 ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "Player_Attack"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 32, 34, 36, 38 ]
+}
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:frame_coords")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 5 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "Run"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 0, 1 ), Vector2( 1, 1 ), Vector2( 2, 1 ), Vector2( 3, 1 ), Vector2( 4, 1 ), Vector2( 5, 1 ) ]
+}
+
+[sub_resource type="CapsuleShape2D" id=10]
+radius = 16.0
+height = 30.0
+
+[sub_resource type="Curve" id=13]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), -3.08511, 0.0, 0, 0 ]
 
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 2 )
+MOVE_SPEED = 500.0
+JUMP_TIME_TO_PEAK = 0.7
+JUMP_TIME_TO_DESCENT = 0.4
 
 [node name="Sprite" type="Sprite" parent="."]
+material = SubResource( 12 )
 scale = Vector2( 4, 4 )
 texture = ExtResource( 1 )
 hframes = 8
 vframes = 15
+frame = 40
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 1 )
+shape = SubResource( 1 )
+
+[node name="CoyoteTimer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "Idle"
+method_call_mode = 1
+anims/Idle = SubResource( 4 )
+anims/Jump_Down = SubResource( 9 )
+anims/Jump_Up = SubResource( 8 )
+anims/Player_Attack = SubResource( 6 )
+anims/RESET = SubResource( 3 )
+anims/Run = SubResource( 5 )
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 0, 1 )
+shape = SubResource( 10 )
+
+[node name="Flash TImer" type="Timer" parent="."]
+wait_time = 0.1
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+visible = false
+position = Vector2( -15, 26 )
+rotation = 1.5708
+randomness = 1.0
+emission_shape = 2
+emission_rect_extents = Vector2( 5, 1 )
+scale_amount = 4.0
+scale_amount_curve = SubResource( 13 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+offset_h = 0.5
+editor_draw_limits = true
+editor_draw_drag_margin = true
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]
+[connection signal="timeout" from="Flash TImer" to="." method="_on_Flash_TImer_timeout"]
