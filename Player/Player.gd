@@ -6,10 +6,10 @@ var velocity: Vector2 = Vector2.ZERO
 var is_jumping: bool
 var input_vector: Vector2
 
-export var HEALTH: int = 6
-export var JUMP_HEIGHT_INDICATOR: int  = 6
-export var JUMP_TIME_TO_PEAK: float
-export var JUMP_TIME_TO_DESCENT: float
+var HEALTH
+export(int) var JUMP_HEIGHT_INDICATOR  = 6
+export(float) var JUMP_TIME_TO_PEAK
+export(float) var JUMP_TIME_TO_DESCENT
 
 var JUMP_HEIGHT: float = JUMP_HEIGHT_INDICATOR * (258/6)
 
@@ -23,7 +23,8 @@ enum STATE {
 	JUMP,
 	FALL,
 	BEFORE_JUMP,
-	ATTACK
+	ATTACK,
+	HURT
 }
 
 var state_memory = []
@@ -33,6 +34,7 @@ var current_state
 func _ready() -> void:
 	current_state = STATE.IDLE
 	$CPUParticles2D.emitting = false
+	HEALTH = Data.Player_Health
 
 func _physics_process(delta):
 	input_vector = get_input_vector()
@@ -49,10 +51,11 @@ func _physics_process(delta):
 		$CPUParticles2D.rotation_degrees = -90
 		$CPUParticles2D.position = Vector2(15, 26)
 	
-	apply_fall_gravity(delta)
+	
 	
 	match current_state:
 		STATE.IDLE:
+			apply_fall_gravity(delta)
 			$AnimationPlayer.play("Idle")
 			$CPUParticles2D.emitting = false
 			#$CPUParticles2D.hide()
@@ -72,6 +75,7 @@ func _physics_process(delta):
 				current_state = STATE.RUN
 		
 		STATE.RUN:
+			apply_fall_gravity(delta)
 			$AnimationPlayer.play("Run")
 			$CPUParticles2D.emitting = true
 			#$CPUParticles2D.show()
@@ -93,6 +97,7 @@ func _physics_process(delta):
 				current_state = STATE.IDLE
 		
 		STATE.JUMP:
+			apply_fall_gravity(delta)
 			$CPUParticles2D.emitting = false
 			#$CPUParticles2D.hide()
 			if is_on_floor():
@@ -111,6 +116,7 @@ func _physics_process(delta):
 			# Transition from BEFORE_JUMP to JUMP handled in "_on_AnimatedSprite_animation_finished()" method
 		
 		STATE.FALL:
+			apply_fall_gravity(delta)
 			$CPUParticles2D.emitting = false
 			$AnimationPlayer.play("Jump_Down")
 			velocity.x = input_vector.x * MOVE_SPEED
@@ -123,6 +129,18 @@ func _physics_process(delta):
 			
 			if is_on_floor():
 				current_state = state_memory.pop_back()
+		
+		STATE.HURT:
+			HEALTH -= 1
+			$Hurt_Area/CollisionShape2D.disabled = true
+			$"Flash Timer".start()
+			$Sprite.material.set_shader_param("flashModifier", 1)
+			velocity = Vector2.ZERO
+			velocity += Vector2(0, -600)
+#			var tween = get_node("Hurt Tween")
+#			tween.interpolate_property(self, "position",position, position + Vector2(100, -100), 0.1,Tween.TRANS_LINEAR, Tween.EASE_OUT)
+#			tween.start()
+			current_state = state_memory.pop_back()
 	
 	velocity = move_and_slide(velocity, Vector2.UP)
 
@@ -154,6 +172,10 @@ func get_input_vector() -> Vector2:
 func apply_fall_gravity(delta: float) -> void:
 	velocity.y += get_gravity() * delta
 
-func _on_Flash_TImer_timeout():
+func _on_Flash_Timer_timeout():
 	$Sprite.material.set_shader_param("flashModifier", 0)
-	$"../CanvasLayer/UI/Full Heart".material.set_shader_param("flashModifier", 0)
+	$Hurt_Area/CollisionShape2D.disabled = false
+
+func _on_Hurt_Area_area_entered(area: Area2D) -> void:
+	state_memory.push_back(current_state)
+	current_state = STATE.HURT

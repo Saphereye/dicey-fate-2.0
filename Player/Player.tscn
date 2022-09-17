@@ -144,6 +144,7 @@ height = 30.0
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), -3.08511, 0.0, 0, 0 ]
 
 [node name="Player" type="KinematicBody2D"]
+collision_mask = 2
 script = ExtResource( 2 )
 MOVE_SPEED = 500.0
 JUMP_TIME_TO_PEAK = 0.7
@@ -175,14 +176,14 @@ anims/Player_Attack = SubResource( 6 )
 anims/RESET = SubResource( 3 )
 anims/Run = SubResource( 5 )
 
-[node name="Area2D" type="Area2D" parent="."]
-collision_mask = 2
+[node name="Hurt_Area" type="Area2D" parent="."]
+collision_mask = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurt_Area"]
 position = Vector2( 0, 1 )
 shape = SubResource( 10 )
 
-[node name="Flash TImer" type="Timer" parent="."]
+[node name="Flash Timer" type="Timer" parent="."]
 wait_time = 0.1
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
@@ -201,5 +202,5 @@ offset_h = 0.5
 editor_draw_limits = true
 editor_draw_drag_margin = true
 
-[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]
-[connection signal="timeout" from="Flash TImer" to="." method="_on_Flash_TImer_timeout"]
+[connection signal="area_entered" from="Hurt_Area" to="." method="_on_Hurt_Area_area_entered"]
+[connection signal="timeout" from="Flash Timer" to="." method="_on_Flash_Timer_timeout"]
