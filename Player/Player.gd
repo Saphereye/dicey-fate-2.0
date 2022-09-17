@@ -176,6 +176,6 @@ func _on_Flash_Timer_timeout():
 	$Sprite.material.set_shader_param("flashModifier", 0)
 	$Hurt_Area/CollisionShape2D.disabled = false
 
-func _on_Hurt_Area_area_entered(area: Area2D) -> void:
+func _on_Hurt_Area_area_entered(_area: Area2D) -> void:
 	state_memory.push_back(current_state)
 	current_state = STATE.HURT
