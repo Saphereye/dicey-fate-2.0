@@ -20,6 +20,7 @@ onready var FALL_GRAVITY: float = ((-2.0 * JUMP_HEIGHT) / (JUMP_TIME_TO_DESCENT 
 
 func _ready() -> void:
 	$Timer.start()
+	$Sprite.material.set_shader_param("flashModifier", 0)
 
 func _physics_process(delta: float) -> void:
 	apply_fall_gravity(delta)
@@ -29,7 +30,7 @@ func _physics_process(delta: float) -> void:
 	
 	velocity.x = direction * BASE_SPEED
 	velocity = move_and_slide(velocity)
-	
+
 func apply_fall_gravity(delta: float) -> void:
 	velocity.y += get_gravity() * delta
 
@@ -42,3 +43,16 @@ func _on_Timer_timeout() -> void:
 	$Sprite.flip_h = not $Sprite.flip_h
 	$RayCast2D.rotate(deg2rad(180))
 	$Timer.start()
+
+
+func _on_Hurt_Area_area_entered(area: Area2D) -> void:
+	HEALTH -= 1
+	if HEALTH <= 0:
+		self.queue_free()
+		return
+	$Sprite.material.set_shader_param("flashModifier", 1)
+	$"Flash Timer".start()
+
+
+func _on_Flash_Timer_timeout() -> void:
+	$Sprite.material.set_shader_param("flashModifier", 0)

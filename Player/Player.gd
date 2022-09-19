@@ -33,23 +33,36 @@ var current_state
 
 func _ready() -> void:
 	current_state = STATE.IDLE
+	$Sprite.show()
+	$"Sword Attack".hide()
 	$CPUParticles2D.emitting = false
+	$"Hit Area/CollisionShape2D".disabled = true
 	HEALTH = Data.Player_Health
 
 func _physics_process(delta):
-	input_vector = get_input_vector()
+	if current_state != STATE.ATTACK:
+		input_vector = get_input_vector()
+	else:
+		input_vector = Vector2.ZERO
 	
-	if input_vector.x > 0:
-		$Sprite.flip_h = false
-		# TODO : Smooth camera lookahead
-		#$Camera2D.offset_h = .5
-		$CPUParticles2D.rotation_degrees = 90
-		$CPUParticles2D.position = Vector2(-15, 26)
-	elif input_vector.x < 0:
-		$Sprite.flip_h = true
-		#$Camera2D.offset_h = -.5
-		$CPUParticles2D.rotation_degrees = -90
-		$CPUParticles2D.position = Vector2(15, 26)
+	if current_state != STATE.ATTACK:
+		if input_vector.x > 0:
+			$Sprite.flip_h = false
+			$"Sword Attack".flip_h =  false
+			$"Sword Attack".offset = Vector2(8, 0)
+			$"Hit Area/CollisionShape2D".position = Vector2(44, 8)
+			# TODO : Smooth camera lookahead
+			#$Camera2D.offset_h = .5
+			$CPUParticles2D.rotation_degrees = 90
+			$CPUParticles2D.position = Vector2(-15, 26)
+		elif input_vector.x < 0:
+			$Sprite.flip_h = true
+			$"Sword Attack".flip_h =  true
+			$"Sword Attack".offset = Vector2(-8, 0)
+			$"Hit Area/CollisionShape2D".position = Vector2(-44, 8)
+			#$Camera2D.offset_h = -.5
+			$CPUParticles2D.rotation_degrees = -90
+			$CPUParticles2D.position = Vector2(15, 26)
 	
 	
 	
@@ -59,6 +72,11 @@ func _physics_process(delta):
 			$AnimationPlayer.play("Idle")
 			$CPUParticles2D.emitting = false
 			#$CPUParticles2D.hide()
+			
+			if Input.is_action_pressed("attack"):
+				state_memory.push_back(STATE.IDLE)
+				current_state = STATE.ATTACK
+				continue
 
 			if Input.is_action_just_pressed("jump"):
 				state_memory.push_back(STATE.IDLE)
@@ -82,6 +100,11 @@ func _physics_process(delta):
 			
 			move_player_in_x()
 			
+			if Input.is_action_pressed("attack"):
+				state_memory.push_back(STATE.RUN)
+				current_state = STATE.ATTACK
+				continue
+			
 			if Input.is_action_just_pressed("jump"):
 				state_memory.push_back(STATE.RUN)
 				current_state = STATE.JUMP
@@ -103,6 +126,11 @@ func _physics_process(delta):
 			if is_on_floor():
 				velocity.y = JUMP_VELOCITY
 			
+			if Input.is_action_pressed("attack"):
+				state_memory.push_back(STATE.JUMP)
+				current_state = STATE.ATTACK
+				continue
+			
 			if Input.is_action_just_released("jump") and velocity.y < 0:
 				velocity.y = 0
 			
@@ -120,6 +148,11 @@ func _physics_process(delta):
 			$CPUParticles2D.emitting = false
 			$AnimationPlayer.play("Jump_Down")
 			velocity.x = input_vector.x * MOVE_SPEED
+			
+			if Input.is_action_pressed("attack"):
+				state_memory.push_back(STATE.FALL)
+				current_state = STATE.ATTACK
+				continue
 			
 			if Input.is_action_just_pressed("jump") and !$CoyoteTimer.is_stopped():
 				$CoyoteTimer.stop()
@@ -141,6 +174,12 @@ func _physics_process(delta):
 #			tween.interpolate_property(self, "position",position, position + Vector2(100, -100), 0.1,Tween.TRANS_LINEAR, Tween.EASE_OUT)
 #			tween.start()
 			current_state = state_memory.pop_back()
+		
+		STATE.ATTACK:
+			apply_fall_gravity(delta)
+			if is_on_floor():
+				velocity = Vector2.ZERO
+			$AnimationPlayer.play("Player_Attack")
 	
 	velocity = move_and_slide(velocity, Vector2.UP)
 
@@ -179,3 +218,9 @@ func _on_Flash_Timer_timeout():
 func _on_Hurt_Area_area_entered(_area: Area2D) -> void:
 	state_memory.push_back(current_state)
 	current_state = STATE.HURT
+
+
+func _on_AnimationPlayer_animation_finished(anim_name: String) -> void:
+	match anim_name:
+		"Player_Attack":
+			current_state = state_memory.pop_back()
