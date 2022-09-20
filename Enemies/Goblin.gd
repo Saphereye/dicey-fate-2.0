@@ -18,17 +18,23 @@ onready var JUMP_VELOCITY: float = ((2.0 * JUMP_HEIGHT) / JUMP_TIME_TO_PEAK) * -
 onready var JUMP_GRAVITY: float = ((-2.0 * JUMP_HEIGHT) / (JUMP_TIME_TO_PEAK * JUMP_TIME_TO_PEAK)) * -1.0
 onready var FALL_GRAVITY: float = ((-2.0 * JUMP_HEIGHT) / (JUMP_TIME_TO_DESCENT * JUMP_TIME_TO_DESCENT)) * -1.0
 
+var rng = RandomNumberGenerator.new()
+
 func _ready() -> void:
 	$Timer.start()
 	$Sprite.material.set_shader_param("flashModifier", 0)
+	$AnimationPlayer.play("Run")
 
 func _physics_process(delta: float) -> void:
-	apply_fall_gravity(delta)
+	if not is_on_floor():
+		apply_fall_gravity(delta)
 	
-	if $RayCast2D.is_colliding():
+	if $"Flip Cast".is_colliding():
+		_on_Timer_timeout()
+	elif $"Jump Cast".is_colliding()  and $"On Ground Cast".is_colliding():
 		velocity.y = JUMP_VELOCITY
 	
-	velocity.x = direction * BASE_SPEED
+	velocity.x = direction * BASE_SPEED * Data.difficulty
 	velocity = move_and_slide(velocity)
 
 func apply_fall_gravity(delta: float) -> void:
@@ -41,11 +47,13 @@ func get_gravity() -> float:
 func _on_Timer_timeout() -> void:
 	direction *= -1
 	$Sprite.flip_h = not $Sprite.flip_h
-	$RayCast2D.rotate(deg2rad(180))
-	$Timer.start()
+	$"Jump Cast".rotate(deg2rad(180))
+	$"Flip Cast".rotate(deg2rad(180))
+	rng.randomize()
+	$Timer.start(rng.randi()%10)
 
 
-func _on_Hurt_Area_area_entered(area: Area2D) -> void:
+func _on_Hurt_Area_area_entered(_area: Area2D) -> void:
 	HEALTH -= 1
 	if HEALTH <= 0:
 		self.queue_free()

@@ -7,10 +7,10 @@ extends Node2D
 var simple_generation_data_array = []
 var excess_randomness_data_array = []
 
-onready var tile_map = $Vertical
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	var tile_map = $Vertical
+	print(tile_map)
 	for x in range(100):
 		for y in range(100):
 			if tile_map.get_cell(x, y) == 0:

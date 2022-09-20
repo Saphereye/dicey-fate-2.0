@@ -61,6 +61,7 @@ attack={
 2d_physics/layer_2="World"
 2d_physics/layer_3="Harming"
 2d_physics/layer_4="Hit"
+2d_physics/layer_18=false
 
 [physics]
 
