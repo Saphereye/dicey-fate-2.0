@@ -61,8 +61,8 @@ tracks/0/keys = {
 }
 
 [node name="Goblin" type="KinematicBody2D"]
-collision_layer = 4
-collision_mask = 7
+collision_layer = 0
+collision_mask = 0
 script = ExtResource( 2 )
 JUMP_TIME_TO_DESCENT = 0.4
 
@@ -113,6 +113,21 @@ collision_mask = 2
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/RESET = SubResource( 5 )
 anims/Run = SubResource( 6 )
+
+[node name="Harming Area" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Harming Area"]
+shape = SubResource( 4 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = -8.0
+margin_top = -48.0
+margin_right = 16.0
+margin_bottom = -32.0
+text = "3"
+fit_content_height = true
 
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
 [connection signal="timeout" from="Flash Timer" to="." method="_on_Flash_Timer_timeout"]

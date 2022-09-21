@@ -7,7 +7,7 @@ export(int) var movement_range = 500
 var velocity = Vector2.ZERO
 var direction = 1
 
-export(int) var HEALTH = 6
+export(float) var HEALTH = 36.0
 export(int) var JUMP_HEIGHT_INDICATOR  = 1
 export(float) var JUMP_TIME_TO_PEAK = .1
 export(float) var JUMP_TIME_TO_DESCENT
@@ -24,6 +24,7 @@ func _ready() -> void:
 	$Timer.start()
 	$Sprite.material.set_shader_param("flashModifier", 0)
 	$AnimationPlayer.play("Run")
+	$RichTextLabel.text = str(HEALTH)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -54,12 +55,15 @@ func _on_Timer_timeout() -> void:
 
 
 func _on_Hurt_Area_area_entered(_area: Area2D) -> void:
+	HEALTH = HEALTH * (Data.difficulty / 6)
 	HEALTH -= 1
 	if HEALTH <= 0:
 		self.queue_free()
 		return
 	$Sprite.material.set_shader_param("flashModifier", 1)
 	$"Flash Timer".start()
+	$RichTextLabel.text = str(HEALTH)
+	print(HEALTH)
 
 
 func _on_Flash_Timer_timeout() -> void:

@@ -6,6 +6,7 @@
 extents = Vector2( 32, 16 )
 
 [node name="Spikes" type="Node2D"]
+show_behind_parent = true
 
 [node name="Sprite" type="Sprite" parent="."]
 scale = Vector2( 4, 4 )

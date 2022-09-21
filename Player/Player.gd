@@ -168,8 +168,8 @@ func _physics_process(delta):
 			$Hurt_Area/CollisionShape2D.disabled = true
 			$"Flash Timer".start()
 			$Sprite.material.set_shader_param("flashModifier", 1)
-			velocity = Vector2.ZERO
-			velocity += Vector2(0, -600)
+#			velocity = Vector2.ZERO
+#			velocity += Vector2(0, -600)
 #			var tween = get_node("Hurt Tween")
 #			tween.interpolate_property(self, "position",position, position + Vector2(100, -100), 0.1,Tween.TRANS_LINEAR, Tween.EASE_OUT)
 #			tween.start()

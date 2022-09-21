@@ -6,10 +6,12 @@ extends Node2D
 # var b: String = "text"
 var simple_generation_data_array = []
 var excess_randomness_data_array = []
+var top_spikes_data_array = []
+var bottom_spikes_data_array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var tile_map = $Vertical
+	var tile_map = $Horizontal
 	print(tile_map)
 	for x in range(100):
 		for y in range(100):
@@ -17,12 +19,8 @@ func _ready() -> void:
 				simple_generation_data_array.append([x, y])
 			if tile_map.get_cell(x, y) == 1:
 				excess_randomness_data_array.append([x, y])
-	var simple_string = ''
-	var random_string = ''
-	for i in simple_generation_data_array:
-		simple_string += str(i) + ','
-	for i in excess_randomness_data_array:
-		random_string += str(i) + ','
-	print(simple_string)
-	print()
-	print(random_string)
+			if tile_map.get_cell(x, y) == 2:
+				top_spikes_data_array.append([x, y])
+			if tile_map.get_cell(x, y) == 6:
+				bottom_spikes_data_array.append([x, y])
+	print('[', simple_generation_data_array, ', ', excess_randomness_data_array, ',', top_spikes_data_array, ',', bottom_spikes_data_array, ',', 16, ',', 16, '],')
