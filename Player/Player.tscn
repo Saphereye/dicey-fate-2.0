@@ -1,7 +1,8 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Assets/herochar sprites(new)/herochar_spritesheet(new).png" type="Texture" id=1]
 [ext_resource path="res://Player/Player.gd" type="Script" id=2]
+[ext_resource path="res://Assets/light.png" type="Texture" id=3]
 [ext_resource path="res://Assets/herochar sprites(new)/herochar_sword_attack_anim_strip_4.png" type="Texture" id=4]
 
 [sub_resource type="Shader" id=11]
@@ -286,7 +287,6 @@ scale_amount_curve = SubResource( 13 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
-zoom = Vector2( 3, 3 )
 offset_h = 0.5
 editor_draw_limits = true
 editor_draw_drag_margin = true
@@ -312,6 +312,11 @@ collision_mask = 16
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Dice Collision Area"]
 position = Vector2( 0, 1 )
 shape = SubResource( 10 )
+
+[node name="Light2D" type="Light2D" parent="."]
+texture = ExtResource( 3 )
+shadow_enabled = true
+shadow_gradient_length = 3.0
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="timeout" from="Flash Timer" to="." method="_on_Flash_Timer_timeout"]
