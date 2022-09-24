@@ -19,6 +19,7 @@ func roll_dice() -> void:
 	$Sprite.frame = (dice_outcome) - 1
 	Data.difficulty = dice_outcome
 	emit_signal("difficulty_changed")
+	$"Player Dice Touch Area/CollisionShape2D".disabled = true
 
 func _on_Player_Dice_Touch_Area_area_entered(_area: Area2D) -> void:
 	roll_dice()

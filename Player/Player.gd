@@ -33,6 +33,7 @@ var current_state
 
 func _ready() -> void:
 	current_state = STATE.IDLE
+	$Sprite.material.set_shader_param("flashModifier", 0)
 	$Sprite.show()
 	$"Sword Attack".hide()
 	$CPUParticles2D.emitting = false
@@ -168,8 +169,6 @@ func _physics_process(delta):
 			$Hurt_Area/CollisionShape2D.disabled = true
 			$"Flash Timer".start()
 			$Sprite.material.set_shader_param("flashModifier", 1)
-#			velocity = Vector2.ZERO
-#			velocity += Vector2(0, -600)
 #			var tween = get_node("Hurt Tween")
 #			tween.interpolate_property(self, "position",position, position + Vector2(100, -100), 0.1,Tween.TRANS_LINEAR, Tween.EASE_OUT)
 #			tween.start()
@@ -215,12 +214,18 @@ func _on_Flash_Timer_timeout():
 	$Sprite.material.set_shader_param("flashModifier", 0)
 	$Hurt_Area/CollisionShape2D.disabled = false
 
-func _on_Hurt_Area_area_entered(_area: Area2D) -> void:
+func _on_Hurt_Area_area_entered(area: Area2D) -> void:
+	velocity = Vector2.ZERO
+	velocity += (area.global_position - global_position).normalized() * JUMP_VELOCITY
 	state_memory.push_back(current_state)
 	current_state = STATE.HURT
+	Data.Player_Health -= 1
 
 
 func _on_AnimationPlayer_animation_finished(anim_name: String) -> void:
 	match anim_name:
 		"Player_Attack":
 			current_state = state_memory.pop_back()
+
+func set_heart():
+	$Hearts.rect_size = Vector2(Data.Player_Health * 16, 16)

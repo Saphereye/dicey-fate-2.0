@@ -12,7 +12,7 @@ var fauna_data_array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var tile_map = $Horizontal
+	var tile_map = $"Dice Room"
 	print(tile_map)
 	for x in range(100):
 		for y in range(100):

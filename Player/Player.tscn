@@ -315,8 +315,16 @@ shape = SubResource( 10 )
 
 [node name="Light2D" type="Light2D" parent="."]
 texture = ExtResource( 3 )
+energy = 0.7
 shadow_enabled = true
-shadow_gradient_length = 3.0
+shadow_gradient_length = 10.0
+
+[node name="Orb Detect Area" type="Area2D" parent="."]
+collision_mask = 32
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Orb Detect Area"]
+position = Vector2( 0, 1 )
+shape = SubResource( 10 )
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="timeout" from="Flash Timer" to="." method="_on_Flash_Timer_timeout"]
