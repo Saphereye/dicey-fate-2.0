@@ -23,3 +23,7 @@ func _on_MainMenu_button_down() -> void:
 func _on_Level0_button_down() -> void:
 	Data.current_scene_index = 0
 	get_tree().change_scene("res://World/Levels/Level 0.tscn")
+
+
+func _on_Resume_button_down() -> void:
+	get_tree().change_scene(Data.scenes[Data.current_scene_index])

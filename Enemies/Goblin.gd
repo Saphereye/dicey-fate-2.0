@@ -57,9 +57,12 @@ func _on_Timer_timeout() -> void:
 func _on_Hurt_Area_area_entered(_area: Area2D) -> void:
 	HEALTH -= 1
 	set_hearts()
+	
 	if HEALTH <= 0:
+		Data.Player_Health += 1
 		self.queue_free()
 		return
+		
 	$Sprite.material.set_shader_param("flashModifier", 1)
 	$"Flash Timer".start()
 	print(HEALTH)
