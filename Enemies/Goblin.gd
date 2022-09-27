@@ -38,6 +38,10 @@ func _physics_process(delta: float) -> void:
 	velocity.x = direction * BASE_SPEED * Data.difficulty
 	velocity = move_and_slide(velocity)
 
+func _process(delta: float) -> void:
+	if $AudioStreamPlayer2D.playing == false:
+		$AudioStreamPlayer2D.play()
+
 func apply_fall_gravity(delta: float) -> void:
 	velocity.y += get_gravity() * delta
 

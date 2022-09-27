@@ -6,6 +6,8 @@ var velocity: Vector2 = Vector2.ZERO
 var is_jumping: bool
 var input_vector: Vector2
 
+var shake_amount = 0
+
 var HEALTH
 export(int) var JUMP_HEIGHT_INDICATOR  = 6
 export(float) var JUMP_TIME_TO_PEAK
@@ -182,6 +184,9 @@ func _physics_process(delta):
 	
 	velocity = move_and_slide(velocity, Vector2.UP)
 
+func _process(delta: float) -> void:
+	$Camera2D.offset = Vector2(rand_range(-shake_amount, shake_amount), rand_range(-shake_amount, shake_amount)) * delta
+
 
 #func _process(_delta: float) -> void:
 #	if HEALTH > 0:
@@ -192,7 +197,7 @@ func _physics_process(delta):
 #
 #	$"../CanvasLayer/UI/Jump Height/Jump Height Indicator".rect_size.x = (90/6) * (JUMP_HEIGHT/258) * JUMP_HEIGHT_INDICATOR
 
-func jump():
+func jump() -> void:
 	velocity.y = JUMP_VELOCITY
 
 func get_gravity() -> float:
@@ -215,6 +220,8 @@ func _on_Flash_Timer_timeout():
 	$Hurt_Area/CollisionShape2D.disabled = false
 
 func _on_Hurt_Area_area_entered(area: Area2D) -> void:
+	AudioManager.play("player_hurt")
+	shake_camera()
 	velocity = Vector2.ZERO
 	velocity += (area.global_position - global_position).normalized() * JUMP_VELOCITY
 	state_memory.push_back(current_state)
@@ -227,5 +234,17 @@ func _on_AnimationPlayer_animation_finished(anim_name: String) -> void:
 		"Player_Attack":
 			current_state = state_memory.pop_back()
 
-func set_heart():
+func set_heart() -> void:
 	$Hearts.rect_size = Vector2(Data.Player_Health * 16, 16)
+
+func shake_camera() -> void:
+	shake_amount = 100
+	$ShakeTimer.start()
+
+
+func _on_ShakeTimer_timeout() -> void:
+	shake_amount = 0
+
+
+func _on_LevelEndCheck_area_entered(area: Area2D) -> void:
+	print("finish")

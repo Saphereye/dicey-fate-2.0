@@ -22,6 +22,7 @@ func _on_MainMenu_button_down() -> void:
 
 func _on_Level0_button_down() -> void:
 	Data.current_scene_index = 0
+	Data.current_player_pos = Vector2(240, 184)
 	get_tree().change_scene("res://World/Levels/Level 0.tscn")
 
 

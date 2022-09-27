@@ -17,6 +17,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Data="*res://DATA.gd"
+AudioManager="*res://World/AudioManager.tscn"
 
 [gui]
 

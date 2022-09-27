@@ -1,14 +1,16 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://World/Theme.tres" type="Theme" id=1]
 [ext_resource path="res://World/TileMap.tscn" type="PackedScene" id=2]
 [ext_resource path="res://World/Miscellaneous/Flowers.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://World/End Screen.gd" type="Script" id=5]
 
 [sub_resource type="Environment" id=1]
 background_energy = 0.0
 
 [node name="End Screen" type="Node2D"]
+script = ExtResource( 5 )
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 margin_left = 310.0

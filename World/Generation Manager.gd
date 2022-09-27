@@ -126,7 +126,7 @@ func create_world() -> void:
 		
 		# Fauna
 		for coor in templates[current_template][4]:
-			if rng.randf() < 1:
+			if rng.randf():
 				place_flower(coor[0], coor[1])
 		
 		$TileMap.update_bitmask_region(current_pos, current_pos + Vector2(templates[current_template][5], templates[current_template][6]))
