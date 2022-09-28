@@ -1,5 +1,8 @@
 extends Control
 
+func _ready() -> void:
+	$RichTextLabel.text = "Current Level : " + str(Data.current_scene_index)
+
 func _on_MainMenu_button_down() -> void:
 	get_tree().change_scene("res://World/Main Menu.tscn")
 

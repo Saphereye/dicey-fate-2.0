@@ -6,4 +6,5 @@ func _on_Button_button_down() -> void:
 
 
 func _on_Button2_button_down() -> void:
+	Data.save_file()
 	get_tree().quit()
