@@ -131,7 +131,7 @@ environment = SubResource( 1 )
 [node name="Goblins" type="Node2D" parent="."]
 
 [node name="Goblin" parent="Goblins" instance=ExtResource( 7 )]
-position = Vector2( 1768, 1280 )
+position = Vector2( 1744, 1272 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 128
@@ -162,9 +162,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Health Orbs" parent="." instance=ExtResource( 9 )]
-position = Vector2( -504, 264 )
-
 [node name="Positions" type="Node2D" parent="."]
 
 [node name="StartingPos" type="Position2D" parent="Positions"]
@@ -194,6 +191,14 @@ color = Color( 0, 0, 0, 0 )
 anims/FadeOut = SubResource( 2 )
 anims/RESET = SubResource( 3 )
 anims/Title = SubResource( 4 )
+
+[node name="Health Orbs" type="Node2D" parent="."]
+
+[node name="Health Orbs" parent="Health Orbs" instance=ExtResource( 9 )]
+position = Vector2( 1856, 160 )
+
+[node name="Health Orbs2" parent="Health Orbs" instance=ExtResource( 9 )]
+position = Vector2( -496, 248 )
 
 [connection signal="level_finished" from="Level Finish Beacon" to="." method="_on_Level_Finish_Beacon_level_finished"]
 [connection signal="difficulty_changed" from="Dice" to="." method="_on_Dice_difficulty_changed"]

@@ -10,12 +10,6 @@ func play(args: String) -> void:
 		"player_hurt":
 			#$PlayerHurt.playing = false
 			$PlayerHurt.play()
-		"player_jump":
-			$PlayerJump.play()
-		"player_run":
-			pass
-		"player_attack":
-			pass
 		"credits":
 			$Credits.play()
 			$BackgroundMusic.stop()
