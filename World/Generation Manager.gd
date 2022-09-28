@@ -177,3 +177,7 @@ func place_flower(x: int, y: int):
 	flower_instance.position = Vector2((current_pos.x + x)*32, (current_pos.y + 0.5 + y)*32)
 	add_child(flower_instance)
 	flowers.append(flower_instance)
+
+
+func _on_Dice2_difficulty_changed() -> void:
+	_on_Dice_difficulty_changed()

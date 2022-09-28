@@ -2,21 +2,18 @@ extends Node2D
 
 var transition_time: float = 2.0
 
-# Currently there are 2
-var current_checkpoint = 0
-
 func _ready() -> void:
+	$AnimationPlayer.play("Title")
 	Data.current_scene_index = 1
-	print(Data.current_player_pos)
+	print(Data.current_player_pos[1])
 	print($Positions/StartingPos.position)
-	if Data.current_player_pos != $Positions/StartingPos.position:
-		match current_checkpoint:
+	if Data.current_player_pos[1] != $Positions/StartingPos.position:
+		match Data.current_checkpoint:
 			1:
-				$Dice.roll_dice_acting()
+				$Die/Dice.roll_dice_acting()
 			2:
-				$Dice2.roll_dice_acting()
-
-	$Player.position = Data.current_player_pos
+				$Die/Dice2.roll_dice_acting()
+	$Player.position = Data.current_player_pos[1]
 
 func _process(delta: float) -> void:
 	if $FadeTimer.get_time_left() != 0:
@@ -28,18 +25,17 @@ func _process(delta: float) -> void:
 		)
 
 func _on_Dice_difficulty_changed() -> void:
-	current_checkpoint = 1
-	Data.current_player_pos = $Positions/Checkpoint1.position
+	Data.current_checkpoint = 1
+	Data.current_player_pos[1] = $Positions/Checkpoint1.position
+	print("Reached checkpoint 1")
 
 func _on_Level_Finish_Beacon_level_finished() -> void:
-	$FadeTimer.start()
-
-
-func _on_FadeTimer_timeout() -> void:
+	$AnimationPlayer.play("FadeOut")
+	yield($AnimationPlayer, "animation_finished")
 	Data.next_scene()
 
-
 func _on_Dice2_difficulty_changed() -> void:
-	current_checkpoint = 2
-	Data.current_player_pos = $Positions/Checkpoint2.position
+	Data.current_checkpoint = 2
+	Data.current_player_pos[1] = $Positions/Checkpoint2.position
+	print("Reached checkpoint 2")
 

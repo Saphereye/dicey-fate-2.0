@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://World/Generation Manager.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
@@ -14,6 +14,66 @@
 [sub_resource type="Environment" id=1]
 background_energy = 0.0
 
+[sub_resource type="Animation" id=2]
+resource_name = "FadeOut"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("FadingCanvas/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("FadingCanvas/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Player/HeartLayer/TitleText:percent_visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "Title"
+length = 3.0
+step = 1.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Player/HeartLayer/TitleText:percent_visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2, 3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0, 1.0, 0.0 ]
+}
+
 [node name="Level 0" type="Node2D"]
 script = ExtResource( 10 )
 
@@ -26,6 +86,16 @@ variation_ratio = 0.5
 position = Vector2( 240, 184 )
 
 [node name="HeartLayer" parent="Player" instance=ExtResource( 8 )]
+
+[node name="TitleText" type="RichTextLabel" parent="Player/HeartLayer"]
+margin_left = 704.0
+margin_top = 480.0
+margin_right = 772.0
+margin_bottom = 500.0
+rect_scale = Vector2( 4, 4 )
+visible_characters = 0
+percent_visible = 0.0
+text = "Level 0"
 
 [node name="Level Finish Beacon" parent="." instance=ExtResource( 3 )]
 position = Vector2( 2312, 1208 )
@@ -109,9 +179,6 @@ __meta__ = {
 "_gizmo_extents_": 20.0
 }
 
-[node name="FadeTimer" type="Timer" parent="."]
-wait_time = 2.0
-
 [node name="FadingCanvas" type="CanvasLayer" parent="."]
 layer = 128
 follow_viewport_enable = true
@@ -123,7 +190,11 @@ margin_right = 3448.0
 margin_bottom = 1824.0
 color = Color( 0, 0, 0, 0 )
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/FadeOut = SubResource( 2 )
+anims/RESET = SubResource( 3 )
+anims/Title = SubResource( 4 )
+
 [connection signal="level_finished" from="Level Finish Beacon" to="." method="_on_Level_Finish_Beacon_level_finished"]
 [connection signal="difficulty_changed" from="Dice" to="." method="_on_Dice_difficulty_changed"]
 [connection signal="difficulty_changed" from="Dice" to="Generation Manager" method="_on_Dice_difficulty_changed"]
-[connection signal="timeout" from="FadeTimer" to="." method="_on_FadeTimer_timeout"]

@@ -234,8 +234,8 @@ func _on_AnimationPlayer_animation_finished(anim_name: String) -> void:
 		"Player_Attack":
 			current_state = state_memory.pop_back()
 
-func set_heart() -> void:
-	$Hearts.rect_size = Vector2(Data.Player_Health * 16, 16)
+#func set_heart() -> void:
+#	$Hearts.rect_size = Vector2(Data.Player_Health * 16, 16)
 
 func shake_camera() -> void:
 	shake_amount = 100
@@ -244,7 +244,3 @@ func shake_camera() -> void:
 
 func _on_ShakeTimer_timeout() -> void:
 	shake_amount = 0
-
-
-func _on_LevelEndCheck_area_entered(area: Area2D) -> void:
-	Data.next_scene()
