@@ -3,7 +3,7 @@ extends Node
 export(int, -1, 6) var Player_Health = 6
 export(int, 1, 6) var difficulty = 1
 
-var scenes = ["res://World/Levels/Level 0.tscn", "res://World/End Screen.tscn"]
+var scenes = ["res://World/Levels/Level 0.tscn", "res://World/Levels/Level 1.tscn","res://World/End Screen.tscn"]
 
 var current_scene_index: int = 0
 var current_player_pos := Vector2(240, 184)

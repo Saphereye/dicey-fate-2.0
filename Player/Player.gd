@@ -76,7 +76,7 @@ func _physics_process(delta):
 			$CPUParticles2D.emitting = false
 			#$CPUParticles2D.hide()
 			
-			if Input.is_action_pressed("attack"):
+			if Input.is_action_just_pressed("attack"):
 				state_memory.push_back(STATE.IDLE)
 				current_state = STATE.ATTACK
 				continue
@@ -98,12 +98,13 @@ func _physics_process(delta):
 		STATE.RUN:
 			apply_fall_gravity(delta)
 			$AnimationPlayer.play("Run")
+			AudioManager.play("player_run")
 			$CPUParticles2D.emitting = true
 			#$CPUParticles2D.show()
 			
 			move_player_in_x()
 			
-			if Input.is_action_pressed("attack"):
+			if Input.is_action_just_pressed("attack"):
 				state_memory.push_back(STATE.RUN)
 				current_state = STATE.ATTACK
 				continue
@@ -127,6 +128,7 @@ func _physics_process(delta):
 			$CPUParticles2D.emitting = false
 			#$CPUParticles2D.hide()
 			if is_on_floor():
+				AudioManager.play("player_jump")
 				velocity.y = JUMP_VELOCITY
 			
 			if Input.is_action_pressed("attack"):
@@ -152,7 +154,7 @@ func _physics_process(delta):
 			$AnimationPlayer.play("Jump_Down")
 			velocity.x = input_vector.x * MOVE_SPEED
 			
-			if Input.is_action_pressed("attack"):
+			if Input.is_action_just_pressed("attack"):
 				state_memory.push_back(STATE.FALL)
 				current_state = STATE.ATTACK
 				continue
@@ -171,9 +173,6 @@ func _physics_process(delta):
 			$Hurt_Area/CollisionShape2D.disabled = true
 			$"Flash Timer".start()
 			$Sprite.material.set_shader_param("flashModifier", 1)
-#			var tween = get_node("Hurt Tween")
-#			tween.interpolate_property(self, "position",position, position + Vector2(100, -100), 0.1,Tween.TRANS_LINEAR, Tween.EASE_OUT)
-#			tween.start()
 			current_state = state_memory.pop_back()
 		
 		STATE.ATTACK:
@@ -181,6 +180,7 @@ func _physics_process(delta):
 			if is_on_floor():
 				velocity = Vector2.ZERO
 			$AnimationPlayer.play("Player_Attack")
+			AudioManager.play("player_attack")
 	
 	velocity = move_and_slide(velocity, Vector2.UP)
 
@@ -247,4 +247,4 @@ func _on_ShakeTimer_timeout() -> void:
 
 
 func _on_LevelEndCheck_area_entered(area: Area2D) -> void:
-	print("finish")
+	Data.next_scene()

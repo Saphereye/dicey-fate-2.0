@@ -37,9 +37,6 @@ rect_min_size = Vector2( 66, 22 )
 rect_scale = Vector2( 4, 4 )
 theme = ExtResource( 1 )
 text = "Level 1"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="MainMenu" type="Button" parent="."]
 margin_left = 104.0
@@ -71,5 +68,7 @@ rect_scale = Vector2( 4, 4 )
 text = "Settings"
 
 [connection signal="button_down" from="Level0" to="." method="_on_Level0_button_down"]
+[connection signal="button_down" from="Level1" to="." method="_on_Level1_button_down"]
 [connection signal="button_down" from="MainMenu" to="." method="_on_MainMenu_button_down"]
 [connection signal="button_down" from="Resume" to="." method="_on_Resume_button_down"]
+[connection signal="button_down" from="Settings" to="." method="_on_Settings_button_down"]

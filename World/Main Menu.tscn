@@ -52,6 +52,9 @@ position = Vector2( 304, 512 )
 [node name="Hearts" parent="Goblin" index="11"]
 visible = false
 
+[node name="AudioStreamPlayer2D" parent="Goblin" index="12"]
+stream_paused = true
+
 [node name="Flowers" parent="." instance=ExtResource( 5 )]
 position = Vector2( 416, 496 )
 
@@ -64,6 +67,14 @@ position = Vector2( 864, 464 )
 [node name="Flowers4" parent="." instance=ExtResource( 5 )]
 position = Vector2( 232, 496 )
 
+[node name="Button2" type="Button" parent="."]
+margin_left = 216.0
+margin_top = 456.0
+margin_right = 259.0
+margin_bottom = 478.0
+text = "Quit"
+
 [connection signal="button_down" from="Button" to="." method="_on_Button_button_down"]
+[connection signal="button_down" from="Button2" to="." method="_on_Button2_button_down"]
 
 [editable path="Goblin"]

@@ -11,6 +11,7 @@ func _ready() -> void:
 
 func roll_dice() -> void:
 	$AnimationPlayer.play("Roll")
+	$AudioStreamPlayer2D.play()
 	yield($AnimationPlayer, "animation_finished")
 	
 	rng.randomize()
